@@ -1,8 +1,7 @@
 use std::env;
 use std::io::{self, Read, Write};
 
-const CHUNK_SIZE:
-usize = 16 * 1024; //16kb chunk size
+const CHUNK_SIZE: usize = 16 * 1024; //16kb chunk size
 
 fn main() {
     let silent = !env::var("PV_SILENT").unwrap_or_default().is_empty();
