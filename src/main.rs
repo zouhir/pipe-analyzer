@@ -1,7 +1,7 @@
 use clap::{App, Arg};
-use std::fs::File;
 use std::env;
-use std::io::{self, ErrorKind, Read, Result, Write};
+use std::fs::File;
+use std::io::{self, BufReader, BufWriter, ErrorKind, Read, Result, Write};
 
 const CHUNK_SIZE: usize = 16 * 1024; //16kb chunk size
 
@@ -30,15 +30,15 @@ fn main() -> Result<()> {
     //dbg!(silent, in_file, out_file);
 
     let mut reader: Box<dyn Read> = if !in_file.is_empty() {
-        Box::new(File::open(in_file)?)
+        Box::new(BufReader::new(File::open(in_file)?))
     } else {
-        Box::new(io::stdin())
+        Box::new(BufReader::new(io::stdin()))
     };
 
     let mut writer: Box<dyn Write> = if !out_file.is_empty() {
-        Box::new(File::create(out_file)?)
+        Box::new(BufWriter::new(File::create(out_file)?))
     } else {
-        Box::new(io::stdout())
+        Box::new(BufWriter::new(io::stdout()))
     };
 
     let mut total_bytes = 0;
